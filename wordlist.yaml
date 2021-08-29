@@ -1,6 +1,12 @@
 banned_words:
- - child
  - p0rn
  - p0rn0
+ - porn
+ - porno
+ - pornography
  - .gg/
  - discord.gg/
+alert_channel:
+  #channel id here
+muted_role:
+  #User punished role name here
