@@ -7,6 +7,6 @@ banned_words:
  - .gg/
  - discord.gg/
 alert_channel:
-  #channel id here
-muted_role:
-  #User punished role name here
+  #alert channel ID here
+punished_role_ID:
+  #punishment role ID here
