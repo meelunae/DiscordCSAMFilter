@@ -1,12 +1,13 @@
 import discord
 from discord.ext import commands
-from PIL import Image
-import numpy as np
 import io
+import numpy as np
+from PIL import Image
+import pytesseract
 import requests
 import yaml
-import pytesseract
 
+TOKEN = 'your token'
 bot = commands.Bot(command_prefix='!')
 wordlist_file = open("wordlist.yaml")
 wordlist = yaml.load(wordlist_file, Loader=yaml.FullLoader)
@@ -17,19 +18,15 @@ async def on_ready():
 
 @bot.event
 async def on_message(message):
-    
     urls = set()
-
     for part in message.content.lower().split():
         if part.startswith("http") and (part.endswith(".jpg") or part.endswith(".png") or part.endswith(".jpeg")):
             urls.add(part)
-
     if message.attachments:
         for attachment in message.attachments:
             # just like embeds, attachments that are not images do not interest us so we won't add them to the URL list to scan
             if attachment.url.lower().endswith(".jpg") or attachment.url.lower().endswith(".png") or attachment.url.lower().endswith(".jpeg"):
                 urls.add(attachment.url) 
-
     if len(urls) > 0:
         for url in urls:
             if scancontent(url):
@@ -52,6 +49,9 @@ def scancontent(url):
         im = Image.open(io.BytesIO(r.content))
         image =  np.array(im)
         text = pytesseract.image_to_string(image)
+        # Freeing memory because we don't need the image anymore, text is enough
+        im.close()
+        image = None
         for word in wordlist["banned_words"]:
             if word in text.lower():
                 return True
@@ -59,5 +59,8 @@ def scancontent(url):
         print(err)
         return False
 
+def main():
+    bot.run(TOKEN)
 
-bot.run('token')
+if __name__ == '__main__':
+    main()
