@@ -1,0 +1,10 @@
+banned_words:
+ - # word 1
+ - # word 2
+ - # word 3
+alert_channel:
+  # alert channel ID here
+punished_role_ID:
+  # punishment role ID here
+moderation_role_ID:
+  # moderation role ID here
